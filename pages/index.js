@@ -3,25 +3,44 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import SearchBox from 'components/SearchBox'
 import GifCard from 'components/GifCard'
+import { SkeletonCards } from 'components/SekeletonCards'
 
 export default function Home() {
   const [gifs, setGifs] = useState('')
   const [gifsList, setGifsList ] = useState([])
+  const [isLoading, setIsLoading ] = useState(false) 
+  const [isSearching, setIsSarching ] = useState(false) 
+
   const [ offset, setOffset] = useState(0)
   useEffect(()=>{
+    
     if(gifs ===''){
+      setIsSarching(true)
     fetch('/api/search-all?offset=0').then(res=>res.json()).then(res=>{
       setGifsList(res.gifsList)
       setOffset(0)
-    })}else{
+      setIsSarching(false)
+    }).catch((err)=>{
+      console.error(err)
+      setIsSarching(false)
+    })
+  
+  }else{
+      setIsSarching(true)
       const search = encodeURI(gifs)
         fetch(`/api/search-gifs?to_search=${search}&offset=0`).then(res=>res.json()).then(res=>{
           setGifsList(res.gifsList)
           setOffset(0)
+          setIsSarching(false)
+        }).catch((err)=>{
+          console.error(err)
+          setIsSarching(false)
         })
     }
+    
   },[gifs])  
   const handeShowMore = ()=>{
+    setIsLoading(true)
       if(gifs ===''){
         fetch(`/api/search-all?offset=${offset+11}`).then(res=>res.json()).then(res=>{
           setGifsList(prev=>prev.concat(...res.gifsList))
@@ -30,9 +49,14 @@ export default function Home() {
       const search = encodeURI(gifs)
       fetch(`/api/search-gifs?to_search=${search}&offset=${offset+11}`).then(res=>res.json()).then(res=>{
         setGifsList(prev=>prev.concat(...res.gifsList))
+        setIsLoading(false)
+      }).catch((err)=>{
+        console.error(err)
+        setIsLoading(false)
       })    
     }
     setOffset(prev=>prev+10)
+    
   }
   
   return (<>
@@ -47,9 +71,10 @@ export default function Home() {
       <SearchBox  setGifs={setGifs} titleSearch={'type and have fun'} />
       <hr className="my-6 "/>
     </div>
-    <div className="container mx-auto p-2">
+    <div className="container mx-auto p-2">{        isSearching ?<SkeletonCards/>
+     :
     <div className="grid grid-flow-row-dense grid-cols-1 lg:grid-cols-3  gap-x-2 gap-y-1  ">
-   {  gifsList.map(gif=>
+   {gifsList.map(gif=>
           <GifCard 
             key={gif.id} 
             src={gif.image}
@@ -61,12 +86,14 @@ export default function Home() {
           />
         )
 }   
-      </div>
-      <div className="text-center">
-      <button className=" text-center text-gray-800 font-bold py-2 px-4 rounded flex-col justify-center    items-center "
+      </div>}
+      <div className="text-center">{  
+        isLoading ? <span>
+    Processing...</span>
+     : <button className=" text-center text-gray-800 font-bold py-2 px-4 rounded flex-col justify-center    items-center "
       onClick={handeShowMore}>
   <span>SHOW MORE </span>
-</button>
+</button>}
 </div>
       </div>
       </>
