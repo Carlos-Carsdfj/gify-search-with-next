@@ -10,11 +10,11 @@ function GifCard(props) {
     />
     <div className="flex items-center py-1 px-1 gap-2">
     <Image className="mb-3 rounded-full shadow-lg" 
-      src={props.userAvatar} 
+      src={props.useravatar} 
       alt={props.username}
       width={60}
       height={60}
-     
+      priority={true}
     />
     <div className="">
     <h2 className="font-bold " >  

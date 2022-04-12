@@ -2,8 +2,8 @@
 
 export default async function handler(req, res) {
   const gifs = req.query.to_search
-  
-  const response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=XPKc3fqLS3FLGYde6wV8GVWutwfeERM3&q=${gifs}&limit=25&offset=0&rating=g&lang=en`)
+  const offset = req.query.offset
+  const response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${process.env.GIPHY_APP_KEY}q=${gifs}&limit=10&offset=${offset}&rating=g&lang=en`)
   const responJson = await response.json()
   const { data } = responJson
   const arrayGifies = data.map(gif=>({    
