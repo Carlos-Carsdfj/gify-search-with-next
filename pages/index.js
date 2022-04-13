@@ -40,12 +40,8 @@ export default function Home() {
     
   },[gifs])  
   const handeShowMore = ()=>{
-    setIsLoading(true)
-      if(gifs ===''){
-        fetch(`/api/search-all?offset=${offset+11}`).then(res=>res.json()).then(res=>{
-          setGifsList(prev=>prev.concat(...res.gifsList))
-      })
-    }else{
+    if(gifs.length > 0){
+      setIsLoading(true)
       const search = encodeURI(gifs)
       fetch(`/api/search-gifs?to_search=${search}&offset=${offset+11}`).then(res=>res.json()).then(res=>{
         setGifsList(prev=>prev.concat(...res.gifsList))
@@ -56,7 +52,6 @@ export default function Home() {
       })    
     }
     setOffset(prev=>prev+10)
-    
   }
   
   return (<>
@@ -90,7 +85,7 @@ export default function Home() {
       <div className="text-center">{  
         isLoading ? <span>
     Processing...</span>
-     : <button className=" text-center text-gray-800 font-bold py-2 px-4 rounded flex-col justify-center    items-center "
+     : <button className={`text-center text-gray-800 font-bold py-2 px-4 rounded flex-col justify-center    items-center ${ gifs.length>0? '' : 'hidden'} `}
       onClick={handeShowMore}>
   <span>SHOW MORE </span>
 </button>}
