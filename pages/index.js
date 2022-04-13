@@ -4,6 +4,7 @@ import Head from 'next/head'
 import SearchBox from 'components/SearchBox'
 import GifCard from 'components/GifCard'
 import { SkeletonCards } from 'components/SekeletonCards'
+import { searchAll, searchGifs } from 'utils/giphy-search'
 
 export default function Home() {
   const [gifs, setGifs] = useState('')
@@ -13,23 +14,20 @@ export default function Home() {
 
   const [ offset, setOffset] = useState(0)
   useEffect(()=>{
-    
     if(gifs ===''){
       setIsSarching(true)
-    fetch('/api/search-all?offset=0').then(res=>res.json()).then(res=>{
-      setGifsList(res.gifsList)
+    searchAll(0).then(res=>{
+      setGifsList(res)
       setOffset(0)
       setIsSarching(false)
     }).catch((err)=>{
       console.error(err)
       setIsSarching(false)
     })
-  
   }else{
       setIsSarching(true)
-      const search = encodeURI(gifs)
-        fetch(`/api/search-gifs?to_search=${search}&offset=0`).then(res=>res.json()).then(res=>{
-          setGifsList(res.gifsList)
+        searchGifs(gifs,0).then(res=>{
+          setGifsList(res)
           setOffset(0)
           setIsSarching(false)
         }).catch((err)=>{
@@ -40,15 +38,10 @@ export default function Home() {
     
   },[gifs])  
   const handeShowMore = ()=>{
+    if(gifs.length > 0){
     setIsLoading(true)
-      if(gifs ===''){
-        fetch(`/api/search-all?offset=${offset+11}`).then(res=>res.json()).then(res=>{
-          setGifsList(prev=>prev.concat(...res.gifsList))
-      })
-    }else{
-      const search = encodeURI(gifs)
-      fetch(`/api/search-gifs?to_search=${search}&offset=${offset+11}`).then(res=>res.json()).then(res=>{
-        setGifsList(prev=>prev.concat(...res.gifsList))
+      searchGifs(gifs, offset+11).then(res=>{
+        setGifsList(prev=>prev.concat(...res))
         setIsLoading(false)
       }).catch((err)=>{
         console.error(err)
@@ -56,7 +49,6 @@ export default function Home() {
       })    
     }
     setOffset(prev=>prev+10)
-    
   }
   
   return (<>
@@ -90,7 +82,7 @@ export default function Home() {
       <div className="text-center">{  
         isLoading ? <span>
     Processing...</span>
-     : <button className=" text-center text-gray-800 font-bold py-2 px-4 rounded flex-col justify-center    items-center "
+     : <button className={`text-center text-gray-800 font-bold py-2 px-4 rounded flex-col justify-center    items-center ${gifs.length >0 ? '' : 'hidden' }`}
       onClick={handeShowMore}>
   <span>SHOW MORE </span>
 </button>}
