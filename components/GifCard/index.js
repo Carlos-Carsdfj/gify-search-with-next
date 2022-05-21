@@ -1,11 +1,13 @@
 import Image from "next/image"
+
 function GifCard(props) {
-  return (<div className="Gif h-max rounded ">  
+  return (
+        <div className="Gif h-max rounded ">  
     <Image  className="w-full rounded "
         alt='image'
         width={200}
         height={200}
-        {...props}
+        src={props.src}
         layout='responsive'
     />
     <div className="flex items-center py-1 px-1 gap-2">
@@ -22,7 +24,8 @@ function GifCard(props) {
     <h3 className="font-semibold" >Autor : {props.username}</h3>
     </div>
     </div>
-  </div>)
+  </div>
+ )
 }
 
 export default GifCard

@@ -1,5 +1,5 @@
 import  { useState } from 'react'
-import SvgComponent from './SvgComponent'
+//import SvgComponent from './SvgComponent'
 export default function SearchBox({setGifs, titleSearch ='search'}) {
   const  [ textToSearch, setTextToSearch ] = useState('')
   const handleTextChanged = (ev) =>{
@@ -22,12 +22,13 @@ export default function SearchBox({setGifs, titleSearch ='search'}) {
         value={textToSearch}
         onChange={handleTextChanged}
       />
-      <button className='px-5 flex  justify-center items-center bg-blue-600 text-white font-medium text-xs leading-normal uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out  align-center'
+    
+  {  /*  <button className='px-5 flex  justify-center items-center bg-blue-600 text-white font-medium text-xs leading-normal uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out  align-center'
         aria-label="Center Align"
       >
         <SvgComponent/>
       </button>
-
+    */}
     </form>
 </>
   )
