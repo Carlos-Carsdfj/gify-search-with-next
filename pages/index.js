@@ -2,7 +2,7 @@
 import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import { LoginContext } from 'context/LoginContext'
+import { LoginContext } from 'context/LoginContextCreate'
 import SearchBox from 'components/SearchBox'
 import GifCard from 'components/GifCard'
 import { SkeletonCards } from 'components/SekeletonCards'

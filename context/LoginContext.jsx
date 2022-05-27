@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
-import { createContext, useState, useEffect } from 'react'
+import {  useState, useEffect } from 'react'
+import { LoginContext } from './LoginContextCreate'
 
-export const LoginContext = createContext()
+
 const initialState = Cookies.get('userInfo')
     ? JSON.parse(Cookies.get('userInfo'))
     : null
@@ -10,7 +11,6 @@ const initialState = Cookies.get('userInfo')
 export function LoginContextProvider({children}) {
   const [user, setUser ] = useState(initialState)
   useEffect(()=>{  
-    console.log('en el context')
     if(user){
       Cookies.set('userInfo', JSON.stringify(user))
     }else{

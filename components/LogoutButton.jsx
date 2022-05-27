@@ -1,5 +1,5 @@
 import {useContext} from 'react'
-import { LoginContext } from 'context/LoginContext'
+import { LoginContext } from '../context/LoginContextCreate'
 
 export default function LogoutButton() {
   const [user, setUser] = useContext(LoginContext)
