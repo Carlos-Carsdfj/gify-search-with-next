@@ -39,14 +39,31 @@ describe('render login page y functions', ()=>{
     ).toEqual('submit')
   })
 
-  test('submit form',async()=>{
+  test('submit form call one time and have any inputs errors',async()=>{
     const userinput = form.getByPlaceholderText('usuario')
     const passwordinput = form.getByPlaceholderText('contraseña')
     fireEvent.change(userinput, { target: { value: 'usuario' } })
     fireEvent.change(passwordinput, { target: { value: '12345678910' } })
     fireEvent.click(submitButton)
+    fireEvent.click(submitButton)
+    await  waitFor(()=>{
+      expect(mockSubmit.mock.calls).toHaveLength(2)
+    })
+  })
+  test('test error inputs',async()=>{
+    const userinput = form.getByPlaceholderText('usuario')
+    const passwordinput = form.getByPlaceholderText('contraseña')
+    fireEvent.change(userinput, { target: { value: 'u' } })
+    fireEvent.change(passwordinput, { target: { value: '12' } })
+    fireEvent.click(submitButton)
     await waitFor(()=>{
-      expect(mockSubmit.mock.calls).toHaveLength(1)
+      expect(form.getByText('el nombre debe ser valido')).toBeDefined()
+    })
+    await waitFor(()=>{
+      expect(form.getByText('la contraseña es invalida')).toBeDefined()
+    })
+    await waitFor(()=>{
+      expect(mockSubmit.mock.calls).toHaveLength(2)
     })
   })
 })
